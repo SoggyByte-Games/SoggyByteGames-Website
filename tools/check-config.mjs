@@ -14,13 +14,13 @@ for (const g of cfg.games) {
   need(g.media?.keyArt || g.media?.trailerMp4, `games[${g.slug}].media — approved key art or trailer`);
 }
 need(cfg.team.length, 'team — verified team members (section hidden until added)');
-cfg.team.forEach((m, i) => need(m.name && m.role, `team[${i}] — ${m.name ? 'role for ' + m.name : 'name and role for ' + (m.portrait || 'member ' + (i + 1))}`));
+cfg.team.forEach((m, i) => need(m.name, `team[${i}] — name for ${m.portrait || 'member ' + (i + 1)}`));
 need(!cfg.legal.draft, 'legal.draft — set to false only after legal review');
 need(cfg.legal.operatorName, 'legal.operatorName — registered legal name');
 need(cfg.legal.operatorAddress || cfg.legal.unregistered, 'legal.operatorAddress — registered business address');
 need(cfg.legal.governingLaw, 'legal.governingLaw — governing law for the Terms of Use');
 need(cfg.legal.hostingProvider, 'legal.hostingProvider — hosting company');
-need(cfg.legal.effectiveDate, 'legal.effectiveDate — effective date of the legal pages');
+need(cfg.legal.effectiveDate, 'legal.effectiveDate — set to the launch date when the site goes live');
 
 if (!missing.length) console.log('✔ All launch values are set.');
 else console.log(`Still to supply (${missing.length}):\n  - ` + missing.join('\n  - '));

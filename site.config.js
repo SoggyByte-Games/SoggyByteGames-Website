@@ -13,12 +13,13 @@ export default {
     shortName: 'SoggyByte',
     // Public website address, e.g. 'https://www.example.com' (no trailing slash).
     // Needed for canonical URLs, social share previews and the sitemap.
-    siteUrl: '',
+    siteUrl: 'https://soggybytegames.com',
     // Shown in the Studio section. Informal until the business is registered.
     founded: '2026-10-06',
+    location: 'Istanbul, Türkiye',
     // Shown in search results and link previews.
     description:
-      'SoggyByte Games is a game studio. Our current project, DoNOTSpill, is coming soon to Steam.',
+      'SoggyByte Games is an Istanbul-based game studio. Our current game, DoNOTSpill, is a two-player co-op delivery game coming soon to Steam.',
   },
 
   contact: {
@@ -31,7 +32,7 @@ export default {
   // Leave a value empty to hide that link everywhere on the site.
   social: {
     youtube: 'https://www.youtube.com/@SoggyByte',
-    instagram: '',
+    instagram: 'https://www.instagram.com/soggybytegames/',
     linkedin: '',
   },
 
@@ -41,11 +42,14 @@ export default {
       title: 'DoNOTSpill',
       // Title split for the typographic treatment: Do · NOT · Spill
       titleParts: ['Do', 'NOT', 'Spill'],
+      // The game's own subtitle from its main menu.
+      genre: 'Local delivery chaos',
+      players: '2 players, co-op',
       status: 'In development',
       platforms: ['PC'],
-      tagline: 'Hold it together.',
+      tagline: 'Two riders. One scooter. Zero spills.',
       summary:
-        'Our current project. We are keeping the details close for now. More will be revealed when it is ready to be seen.',
+        'A two-player co-op game about getting hot food across a colourful city in one piece. One of you drives the scooter, the other keeps the order steady, and neither of you can do it alone. Pick your story, as a couple or as two friends, and take on the city one delivery at a time.',
       // Real Steam store URL, e.g. 'https://store.steampowered.com/app/000000/DoNOTSpill/'.
       // While empty, the Steam call-to-action stays locked as "Coming soon".
       steamUrl: '',

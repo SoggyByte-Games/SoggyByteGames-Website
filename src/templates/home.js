@@ -45,6 +45,7 @@ function facts(cfg) {
     const label = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(d);
     rows.push(`<div><dt>Founded</dt><dd><time datetime="${esc(cfg.studio.founded)}">${label}</time></dd></div>`);
   }
+  if (cfg.studio.location) rows.push(`<div><dt>Based in</dt><dd>${esc(cfg.studio.location)}</dd></div>`);
   if (cfg.games[0]) rows.push(`<div><dt>Now making</dt><dd>${esc(cfg.games[0].title)}</dd></div>`);
   return rows.length ? `<dl class="about__facts" data-reveal>${rows.join('')}</dl>` : '';
 }
@@ -63,7 +64,7 @@ function about(cfg) {
     </h2>
     <div class="about__body">
       <p data-reveal>${esc(cfg.studio.name)} is a game studio built around one idea: the best moments in games are the ones you feel in your hands.</p>
-      <p data-reveal>We care about feel. Timing, weight and the half-second before everything goes wrong. We would rather show than tell, so our current project, <a class="inline-link" href="#games">${esc(game.title)}</a>, is staying under wraps a little longer.</p>
+      <p data-reveal>We care about feel. Timing, weight and the half-second before everything goes wrong. Our current project, <a class="inline-link" href="#games">${esc(game.title)}</a>, puts all of that on the back of a scooter.</p>
       ${facts(cfg)}
     </div>
   </div>
@@ -175,7 +176,7 @@ function games(cfg) {
   <article class="game" aria-labelledby="game-${esc(game.slug)}" data-game>
     <div class="game__stage" data-game-stage>
       <div class="game__titles">
-        <p class="game__index" aria-hidden="true">P—01</p>
+        <p class="game__index"><span aria-hidden="true">P—01</span>${game.genre ? `<span class="game__genre">${esc(game.genre)}</span>` : ''}</p>
         <h3 class="game__title" id="game-${esc(game.slug)}" aria-label="${esc(game.title)}">
           <span class="game__word" aria-hidden="true" data-word>${esc(a)}</span>
           ${b ? `<span class="game__word game__word--accent" aria-hidden="true" data-word>${esc(b)}</span>` : ''}
@@ -184,13 +185,15 @@ function games(cfg) {
         <p class="game__tagline" data-game-tagline>${esc(game.tagline)}</p>
       </div>
       <div class="game__vessel" data-vessel-wrap>
-        <canvas class="vessel" data-vessel role="img" aria-label="Illustration: a glass of liquid tilting towards the rim without spilling."></canvas>
+        <canvas class="vessel" data-vessel role="img" aria-label="Illustration: a burger sliding towards the edge of a tilting delivery box, never quite falling out."></canvas>
       </div>
     </div>
 
     <div class="container game__details">
       <p class="game__summary" data-reveal>${esc(game.summary)}</p>
       <dl class="game__meta">
+        ${game.genre ? `<div data-reveal><dt>Genre</dt><dd>Co-op delivery</dd></div>` : ''}
+        ${game.players ? `<div data-reveal><dt>Players</dt><dd>${esc(game.players)}</dd></div>` : ''}
         <div data-reveal><dt>Status</dt><dd><span class="pulse" aria-hidden="true"></span>${esc(game.status)}</dd></div>
         <div data-reveal><dt>Platform</dt><dd>${esc(game.platforms.join(', '))}</dd></div>
         <div data-reveal><dt>Store</dt><dd>${safeUrl(game.steamUrl) ? 'Steam' : 'Steam · Coming soon'}</dd></div>
@@ -237,7 +240,7 @@ function contact(cfg) {
     rows.push(`<li><a class="contact-row" href="mailto:${esc(email)}">
       <span class="contact-row__fill" aria-hidden="true"></span>
       <span class="contact-row__label">Email</span>
-      <span class="contact-row__value">${esc(email)}</span>${arrowIcon}
+      <span class="contact-row__value contact-row__value--email">${esc(email)}</span>${arrowIcon}
     </a></li>`);
   }
   for (const s of socials) {

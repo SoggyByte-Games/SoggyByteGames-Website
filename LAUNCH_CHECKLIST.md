@@ -6,17 +6,17 @@ Run `npm run check:config` to see which of these are still open.
 
 ## 1. Content we still need
 
-- [ ] **Website address** → `studio.siteUrl` (canonical URLs, share previews)
+- [x] **Website address** → https://soggybytegames.com (sitemap and share previews use it)
 - [x] **Contact email** → `soggybytegames@gmail.com`
 - [x] **YouTube** → https://www.youtube.com/@SoggyByte
-- [ ] **Instagram** URL → `social.instagram`
+- [x] **Instagram** → https://www.instagram.com/soggybytegames/
 - [ ] **LinkedIn** URL → `social.linkedin`
 - [ ] **Steam store URL** → `games[0].steamUrl` (until then the CTA stays locked as "Coming soon")
 - [ ] **DoNOTSpill media**: approved, spoiler-free key art, screenshots and/or a short trailer
       exported from the Unity project (see README → "Adding game media safely")
 - [x] **Team portraits**: two photos added (cropped, GPS/EXIF metadata removed, bystanders faded out)
 - [x] **Team names and LinkedIn**: Barkın Ali Lüküslü, Nur Aslan
-- [ ] **Team roles** (shown under each name)
+- [x] Team roles: not needed for now (field stays empty)
 - [x] Both people agreed to their photo being public
 - [ ] **News**: only once there is a real announcement
 
@@ -25,8 +25,8 @@ Run `npm run check:config` to see which of these are still open.
 These are written for the site but are brand voice, not verified facts. Please confirm or edit:
 
 - [ ] About: "Games made with steady hands and soggy bytes." and the two paragraphs under it
-- [ ] DoNOTSpill tagline: "Hold it together."
-- [ ] DoNOTSpill summary: "Our current project. We are keeping the details close for now…"
+- [ ] DoNOTSpill copy written from the tutorial video (premise only, no twists): tagline "Two riders. One scooter. Zero spills.", genre "Local delivery chaos", players "2 players, co-op" and the summary paragraph
+- [ ] Studio paragraph: "…puts all of that on the back of a scooter."
 - [ ] DoNOTSpill platform shown as **PC** (based on the Steam release; edit if Mac/Linux/Steam Deck are planned)
 - [ ] Contact: "Got something to spill?" / "Press, partnerships, or just a hello."
 
@@ -38,10 +38,10 @@ These are written for the site but are brand voice, not verified facts. Please c
 - [x] Hosting: GitHub Pages (domain registered at Squarespace); GitHub processes data in the US
 - [ ] KVKK Art. 9 transfer basis for GitHub (US) and Gmail
 - [x] Email provider: Google (Gmail)
-- [ ] How long email correspondence is kept, and the KVKK Art. 9 basis for Gmail's processing abroad
+- [x] Email retention: no fixed period; the policy says messages are deleted once no longer needed
 - [ ] Confirm the hosting provider sets no cookies on the domain
-- [ ] Effective date → `legal.effectiveDate`
-- [ ] Whether a VERBİS registration or a separate KVKK "aydınlatma metni" format is required for your entity
+- [ ] Effective date → `legal.effectiveDate`: set to the launch date on launch day
+- [x] VERBİS: not required (confirmed by the team)
 - [ ] **Have a qualified lawyer review all four pages**, then set `legal.draft` to `false`
 
 ## 4. Repository and deployment

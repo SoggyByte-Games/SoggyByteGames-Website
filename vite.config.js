@@ -62,6 +62,22 @@ function sitePages() {
         return out.replace(/\{\{base\}\}/g, base);
       },
     },
+    generateBundle() {
+      const site = (siteConfig.studio.siteUrl || '').replace(/\/$/, '');
+      if (!site) return;
+      const paths = ['/', ...LEGAL_PAGES.map((p) => `/${p.slug}/`)];
+      const urls = paths.map((p) => `  <url><loc>${site}${p}</loc></url>`).join('\n');
+      this.emitFile({
+        type: 'asset',
+        fileName: 'sitemap.xml',
+        source: `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`,
+      });
+      this.emitFile({
+        type: 'asset',
+        fileName: 'robots.txt',
+        source: `User-agent: *\nAllow: /\n\nSitemap: ${site}/sitemap.xml\n`,
+      });
+    },
   };
 }
 

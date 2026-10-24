@@ -479,11 +479,32 @@
   z-index: 1;
 }
 .game__index {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
   font-family: var(--f-display);
   font-size: 0.8rem;
   color: var(--fog);
   letter-spacing: 0.08em;
   margin-bottom: 1.5rem;
+}
+.game__genre {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  font-family: var(--f-text);
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.game__genre::before {
+  content: '';
+  width: 2rem;
+  height: 1px;
+  background: var(--line-on-ink);
 }
 .game__title {
   font-family: var(--f-display);
@@ -892,6 +913,10 @@
 @media (max-width: 699px) {
   .contact-row {
     grid-template-columns: 1fr auto;
+  }
+  .contact-row__value--email {
+    font-size: clamp(0.95rem, 4.6vw, 1.4rem);
+    overflow-wrap: normal;
   }
   .contact-row__label {
     grid-column: 1 / -1;

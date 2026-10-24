@@ -1,11 +1,12 @@
 /**
- * DoNOTSpill title illustration: a glass of liquid that tilts and sloshes towards
- * the rim as you scroll, but never spills. A stylised take on the title only; it does
- * not depict gameplay. Canvas 2D with a small spring-column wave simulation.
+ * DoNOTSpill title illustration: an open delivery box that tilts as you scroll.
+ * The burger inside slides towards the edge, leans over the wall and wobbles,
+ * but never falls out. A stylised take on the game's premise; no game assets used.
+ * Canvas 2D with a few small springs.
  */
 
-const COLS = 40;
 const PAPER = '241, 237, 230';
+const INK = '#0b0b0c';
 
 export function initVessel(canvas, { reduced = false } = {}) {
   const noop = { setTilt() {}, kick() {} };
@@ -25,68 +26,156 @@ export function initVessel(canvas, { reduced = false } = {}) {
     canvas.height = Math.round(H * dpr);
   }
 
-  // Wave state (local surface displacement per column).
-  const hgt = new Float32Array(COLS);
-  const vel = new Float32Array(COLS);
+  // All lengths below are in units of the canvas width (u).
+  const BOX_W = 0.7; // inner floor width
+  const WALL = 0.15; // back wall height
+  const BURGER_W = 0.36;
+  const LAYERS = [
+    // [height, kind]
+    [0.055, 'bun-bottom'],
+    [0.06, 'patty'],
+    [0.018, 'cheese'],
+    [0.024, 'sauce'],
+    [0.1, 'bun-top'],
+  ];
+  const STACK = LAYERS.reduce((t, l) => t + l[0], 0);
+  const LIMIT = BOX_W / 2 - BURGER_W / 2 - 0.006;
 
-  // Tilt spring (radians).
-  let angle = reduced ? -0.12 : 0;
+  // Box tilt spring (radians, positive tips to the right).
+  let angle = reduced ? -0.14 : 0;
   let angVel = 0;
-  let target = reduced ? -0.12 : 0;
+  let target = reduced ? -0.14 : 0;
   let pointerTilt = 0;
-  let lastAcc = 0;
 
-  const bubbles = Array.from({ length: 9 }, (_, i) => ({
-    x: ((i * 37) % 100) / 100 - 0.5,
-    y: Math.random(),
-    r: 1.5 + ((i * 13) % 5) * 0.6,
-    s: 0.03 + ((i * 7) % 5) * 0.012,
-  }));
-
-  function glassPath(g) {
-    // Local coords: origin at the base centre, y up is negative.
-    const { hb, ht, gh, rb } = g;
-    ctx.beginPath();
-    ctx.moveTo(-ht, -gh);
-    ctx.lineTo(-hb, -rb);
-    ctx.quadraticCurveTo(-hb, 0, -hb + rb, 0);
-    ctx.lineTo(hb - rb, 0);
-    ctx.quadraticCurveTo(hb, 0, hb, -rb);
-    ctx.lineTo(ht, -gh);
-  }
+  // Burger state along the box floor, its tip over the wall, and per-layer jelly.
+  let pos = reduced ? -LIMIT * 0.9 : 0;
+  let vel = 0;
+  let tip = reduced ? -0.12 : 0;
+  let tipVel = 0;
+  const lag = new Float32Array(LAYERS.length);
+  const lagVel = new Float32Array(LAYERS.length);
+  let time = 0;
 
   function step(dt) {
-    // Tilt spring towards the target plus pointer influence.
+    time += dt;
     const goal = target + pointerTilt;
-    const acc = (goal - angle) * 38 - angVel * 7.5;
+    const acc = (goal - angle) * 34 - angVel * 7;
     angVel += acc * dt;
     angle += angVel * dt;
-    // Clamp so the liquid can reach the rim but never cross it.
-    angle = Math.max(-0.56, Math.min(0.56, angle));
-    const jerk = acc - lastAcc;
-    lastAcc = acc;
+    angle = Math.max(-0.5, Math.min(0.5, angle));
 
-    // Waves: angular acceleration pushes liquid across the glass.
-    for (let i = 0; i < COLS; i++) {
-      const x = i / (COLS - 1) - 0.5;
-      vel[i] += (acc * 0.0009 + jerk * 0.00002) * x * 60 * dt * 60;
-      vel[i] += -hgt[i] * 120 * dt - vel[i] * 2.6 * dt;
+    // Slide: gravity along the tilted floor, plus a little friction.
+    const slope = Math.sin(angle) * 2.4;
+    const stuck = Math.abs(slope) < 0.08 && Math.abs(vel) < 0.02;
+    const a = stuck ? -vel * 8 : slope - vel * 1.6;
+    const before = vel;
+    vel += a * dt;
+    pos += vel * dt;
+    let impact = 0;
+    if (pos > LIMIT || pos < -LIMIT) {
+      pos = Math.max(-LIMIT, Math.min(LIMIT, pos));
+      impact = vel;
+      vel = -vel * 0.28;
     }
-    // Spread to neighbours.
-    for (let pass = 0; pass < 2; pass++) {
-      for (let i = 0; i < COLS; i++) {
-        const l = hgt[Math.max(0, i - 1)];
-        const r = hgt[Math.min(COLS - 1, i + 1)];
-        vel[i] += (l + r - 2 * hgt[i]) * 260 * dt;
+    const burgerAcc = (vel - before) / Math.max(dt, 1e-4);
+
+    // Tip over the wall while pressed against it, never past the point of falling.
+    const atWall = Math.abs(pos) >= LIMIT - 0.002 && Math.sign(slope) === Math.sign(pos);
+    const tipGoal = atWall ? Math.sign(pos) * Math.min(0.42, Math.max(0, Math.abs(slope) - 0.25) * 0.55) : 0;
+    tipVel += impact * 7;
+    tipVel += ((tipGoal - tip) * 70 - tipVel * 9) * dt;
+    tip += tipVel * dt;
+    tip = Math.max(-0.48, Math.min(0.48, tip));
+
+    // Layers lag behind the base like soft food.
+    for (let i = 0; i < LAYERS.length; i++) {
+      const k = i / (LAYERS.length - 1);
+      lagVel[i] += (-lag[i] * 140 - lagVel[i] * 11 - burgerAcc * k * 0.004) * dt;
+      lag[i] += lagVel[i] * dt;
+      lag[i] = Math.max(-0.035, Math.min(0.035, lag[i]));
+    }
+  }
+
+  function roundRect(c, x, y, w, h, r) {
+    c.beginPath();
+    c.roundRect ? c.roundRect(x, y, w, h, r) : c.rect(x, y, w, h);
+  }
+
+  function drawLayer(c, kind, x, y, w, h) {
+    // y is the layer's bottom edge (local coordinates, up is negative).
+    switch (kind) {
+      case 'bun-bottom': {
+        const g = c.createLinearGradient(0, y - h, 0, y);
+        g.addColorStop(0, '#ff7a45');
+        g.addColorStop(1, '#c63a12');
+        c.fillStyle = g;
+        roundRect(c, x - w / 2, y - h, w, h, [h * 0.25, h * 0.25, h * 0.6, h * 0.6]);
+        c.fill();
+        break;
       }
-    }
-    for (let i = 0; i < COLS; i++) {
-      hgt[i] += vel[i] * dt;
-      hgt[i] = Math.max(-0.07, Math.min(0.07, hgt[i]));
-    }
-    for (const b of bubbles) {
-      b.y += b.s * dt;
-      if (b.y > 1) b.y = 0;
+      case 'patty': {
+        c.fillStyle = '#2a1712';
+        roundRect(c, x - w / 2 - w * 0.03, y - h, w * 1.06, h, h * 0.45);
+        c.fill();
+        c.strokeStyle = 'rgba(255, 140, 90, 0.25)';
+        c.lineWidth = 0.004;
+        for (let i = 0; i < 4; i++) {
+          c.beginPath();
+          c.moveTo(x - w * 0.35 + i * w * 0.2, y - h * 0.7);
+          c.lineTo(x - w * 0.3 + i * w * 0.2, y - h * 0.3);
+          c.stroke();
+        }
+        break;
+      }
+      case 'cheese': {
+        c.fillStyle = '#ffc04a';
+        c.beginPath();
+        c.moveTo(x - w * 0.52, y - h);
+        c.lineTo(x + w * 0.52, y - h);
+        c.lineTo(x + w * 0.4, y + h * 0.9);
+        c.lineTo(x + w * 0.3, y);
+        c.lineTo(x - w * 0.12, y);
+        c.lineTo(x - w * 0.2, y + h * 1.4);
+        c.lineTo(x - w * 0.28, y);
+        c.lineTo(x - w * 0.52, y - h * 0.2);
+        c.closePath();
+        c.fill();
+        break;
+      }
+      case 'sauce': {
+        c.fillStyle = `rgb(${PAPER})`;
+        c.beginPath();
+        c.moveTo(x - w * 0.5, y);
+        for (let i = 0; i <= 8; i++) {
+          const px = x - w * 0.5 + (w * i) / 8;
+          c.lineTo(px, y - h * (i % 2 ? 1 : 0.35));
+        }
+        c.lineTo(x + w * 0.5, y);
+        c.closePath();
+        c.fill();
+        break;
+      }
+      case 'bun-top': {
+        const g = c.createLinearGradient(0, y - h, 0, y);
+        g.addColorStop(0, '#ff8a55');
+        g.addColorStop(1, '#e4471c');
+        c.fillStyle = g;
+        c.beginPath();
+        c.moveTo(x - w * 0.52, y);
+        c.bezierCurveTo(x - w * 0.52, y - h * 1.25, x + w * 0.52, y - h * 1.25, x + w * 0.52, y);
+        c.closePath();
+        c.fill();
+        c.fillStyle = `rgba(${PAPER}, 0.9)`;
+        const seeds = [
+          [-0.26, 0.55], [-0.1, 0.78], [0.08, 0.7], [0.24, 0.5], [-0.02, 0.45], [0.16, 0.85],
+        ];
+        for (const [sx, sy] of seeds) {
+          c.beginPath();
+          c.ellipse(x + sx * w, y - sy * h, w * 0.018, w * 0.008, sx * 0.8, 0, Math.PI * 2);
+          c.fill();
+        }
+        break;
+      }
     }
   }
 
@@ -94,119 +183,100 @@ export function initVessel(canvas, { reduced = false } = {}) {
     const c = ctx;
     c.setTransform(dpr, 0, 0, dpr, 0, 0);
     c.clearRect(0, 0, W, H);
-
     const u = W;
-    const g = { hb: u * 0.19, ht: u * 0.255, gh: H * 0.6, rb: u * 0.06 };
-    const fill = g.gh * 0.7;
-    const px = W / 2;
-    const py = H * 0.82;
-    // Rotate around the middle of the glass so the tilted glass stays inside the canvas.
-    const pivot = -g.gh / 2;
+    const cx = W / 2;
+    const cy = H * 0.6;
 
-    // Floor shadow (world space, stays flat).
-    const sy = py + u * 0.06;
-    const sh = c.createRadialGradient(px, sy, 0, px, sy, u * 0.34);
+    // Floor shadow stays level.
+    const sy = cy + u * 0.075;
+    const sh = c.createRadialGradient(cx, sy, 0, cx, sy, u * 0.4);
     sh.addColorStop(0, 'rgba(0,0,0,0.6)');
     sh.addColorStop(1, 'rgba(0,0,0,0)');
     c.fillStyle = sh;
     c.beginPath();
-    c.ellipse(px, sy, u * 0.34 * (1 - Math.abs(angle) * 0.4), u * 0.045, 0, 0, Math.PI * 2);
+    c.ellipse(cx, sy, u * 0.4 * (1 - Math.abs(angle) * 0.3), u * 0.04, 0, 0, Math.PI * 2);
     c.fill();
 
     c.save();
-    c.translate(px, py + pivot);
+    c.translate(cx, cy);
     c.rotate(angle);
-    c.translate(0, -pivot);
-
-    // Liquid: clipped to the glass, surface stays level with the world.
-    c.save();
-    glassPath(g);
-    c.closePath();
-    c.clip();
-    const tan = Math.tan(angle);
-    const span = g.ht * 1.05;
-    // A level world surface seen in the glass's rotated frame: y = -fill - x·tanθ.
-    const surfY = (x, i) => -fill - x * tan + hgt[i] * u;
-    c.beginPath();
-    for (let i = 0; i < COLS; i++) {
-      const x = -span + (2 * span * i) / (COLS - 1);
-      const y = surfY(x, i);
-      i === 0 ? c.moveTo(x, y) : c.lineTo(x, y);
-    }
-    c.lineTo(span, u);
-    c.lineTo(-span, u);
-    c.closePath();
-    const lg = c.createLinearGradient(0, -fill - u * 0.1, 0, 0);
-    lg.addColorStop(0, '#ff6a3d');
-    lg.addColorStop(0.55, '#e4471c');
-    lg.addColorStop(1, '#8f2508');
-    c.fillStyle = lg;
-    c.fill();
-
-    // Bubbles rising inside the liquid.
-    if (!reduced) {
-      c.fillStyle = `rgba(${PAPER}, 0.22)`;
-      for (const b of bubbles) {
-        const x = b.x * g.hb * 1.6;
-        const y = -b.y * (fill - u * 0.04);
-        if (y > surfY(x, Math.round((x / span + 1) * 0.5 * (COLS - 1))) + 4) {
-          c.beginPath();
-          c.arc(x, y, b.r, 0, Math.PI * 2);
-          c.fill();
-        }
-      }
-    }
-
-    // Meniscus highlight.
-    c.beginPath();
-    for (let i = 0; i < COLS; i++) {
-      const x = -span + (2 * span * i) / (COLS - 1);
-      const y = surfY(x, i);
-      i === 0 ? c.moveTo(x, y) : c.lineTo(x, y);
-    }
-    c.strokeStyle = `rgba(${PAPER}, 0.75)`;
-    c.lineWidth = 2;
-    c.stroke();
-    c.restore();
-
-    // Glass body.
+    c.scale(u, u);
     c.lineJoin = 'round';
     c.lineCap = 'round';
-    glassPath(g);
-    c.strokeStyle = `rgba(${PAPER}, 0.85)`;
-    c.lineWidth = 2;
-    c.stroke();
-    // Thick base.
-    c.beginPath();
-    c.moveTo(-g.hb + g.rb * 0.9, -u * 0.035);
-    c.lineTo(g.hb - g.rb * 0.9, -u * 0.035);
+    const line = 2 / u;
+
+    // Back wall of the box.
+    roundRect(c, -BOX_W / 2, -WALL, BOX_W, WALL, [0.018, 0.018, 0, 0]);
+    const bg = c.createLinearGradient(0, -WALL, 0, 0);
+    bg.addColorStop(0, '#202024');
+    bg.addColorStop(1, '#141416');
+    c.fillStyle = bg;
+    c.fill();
     c.strokeStyle = `rgba(${PAPER}, 0.35)`;
-    c.lineWidth = 1.5;
+    c.lineWidth = line;
     c.stroke();
-    // Rim.
-    c.beginPath();
-    c.moveTo(-g.ht - 3, -g.gh);
-    c.lineTo(g.ht + 3, -g.gh);
-    c.strokeStyle = `rgba(${PAPER}, 0.9)`;
-    c.lineWidth = 2.5;
-    c.stroke();
-    // Reflection streaks.
-    const hl = c.createLinearGradient(0, -g.gh, 0, 0);
-    hl.addColorStop(0, `rgba(${PAPER}, 0)`);
-    hl.addColorStop(0.3, `rgba(${PAPER}, 0.38)`);
-    hl.addColorStop(1, `rgba(${PAPER}, 0)`);
-    c.strokeStyle = hl;
-    c.lineWidth = u * 0.018;
-    c.beginPath();
-    c.moveTo(-g.ht * 0.8, -g.gh * 0.88);
-    c.lineTo(-g.hb * 0.78, -g.gh * 0.12);
-    c.stroke();
-    c.lineWidth = u * 0.006;
-    c.beginPath();
-    c.moveTo(-g.ht * 0.62, -g.gh * 0.8);
-    c.lineTo(-g.hb * 0.62, -g.gh * 0.42);
-    c.stroke();
+
+    // Burger: slides, tips around the corner it leans on, layers wobble.
+    c.save();
+    const pivotX = pos + (tip >= 0 ? BURGER_W / 2 : -BURGER_W / 2);
+    c.translate(pivotX, 0);
+    c.rotate(tip);
+    c.translate(-pivotX, 0);
+    let y = 0;
+    LAYERS.forEach(([h, kind], i) => {
+      drawLayer(c, kind, pos + lag[i], y, BURGER_W, h);
+      y -= h;
+    });
     c.restore();
+
+    // Front wall (drawn over the burger's base) and rim.
+    roundRect(c, -BOX_W / 2 - 0.012, -WALL * 0.45, BOX_W + 0.024, WALL * 0.45 + 0.018, [0, 0, 0.02, 0.02]);
+    const fg = c.createLinearGradient(0, -WALL * 0.45, 0, 0.018);
+    fg.addColorStop(0, '#1c1c1f');
+    fg.addColorStop(1, INK);
+    c.fillStyle = fg;
+    c.fill();
+    c.strokeStyle = `rgba(${PAPER}, 0.85)`;
+    c.lineWidth = line;
+    c.stroke();
+    c.beginPath();
+    c.moveTo(-BOX_W / 2 - 0.012, -WALL);
+    c.lineTo(-BOX_W / 2 - 0.012, -WALL * 0.45);
+    c.moveTo(BOX_W / 2 + 0.012, -WALL);
+    c.lineTo(BOX_W / 2 + 0.012, -WALL * 0.45);
+    c.stroke();
+    // A small brand detail on the box: the studio's droplet.
+    c.fillStyle = 'rgba(255, 91, 46, 0.9)';
+    c.beginPath();
+    c.arc(BOX_W * 0.32, -WALL * 0.22, 0.012, 0, Math.PI * 2);
+    c.fill();
+
+    // Where the burger's top is, in screen space, for the steam.
+    const m = c.getTransform();
+    const top = new DOMPoint(pos, -STACK - 0.02).matrixTransform(m);
+    c.restore();
+
+    // Steam rises straight up regardless of tilt.
+    if (!reduced) {
+      const sx = top.x / dpr;
+      const syTop = top.y / dpr;
+      c.strokeStyle = `rgba(${PAPER}, 0.32)`;
+      c.lineWidth = 2;
+      for (let i = -1; i <= 1; i++) {
+        const phase = time * 1.6 + i * 1.7;
+        const fade = (Math.sin(time * 0.9 + i) + 1) / 2;
+        c.globalAlpha = 0.35 + fade * 0.65;
+        c.beginPath();
+        for (let k = 0; k <= 12; k++) {
+          const t = k / 12;
+          const px = sx + i * u * 0.06 + Math.sin(phase + t * 5) * u * 0.012;
+          const py = syTop - t * u * 0.14;
+          k ? c.lineTo(px, py) : c.moveTo(px, py);
+        }
+        c.stroke();
+      }
+      c.globalAlpha = 1;
+    }
   }
 
   let raf = 0;
@@ -215,7 +285,6 @@ export function initVessel(canvas, { reduced = false } = {}) {
   const loop = (now) => {
     const dt = Math.min(0.033, (now - (last || now)) / 1000);
     last = now;
-    // Two sub-steps keep the springs stable on slow frames.
     step(dt / 2);
     step(dt / 2);
     draw();
@@ -248,7 +317,7 @@ export function initVessel(canvas, { reduced = false } = {}) {
     const stage = canvas.closest('[data-game-stage]') || canvas;
     stage.addEventListener('pointermove', (e) => {
       const r = stage.getBoundingClientRect();
-      pointerTilt = ((e.clientX - r.left) / r.width - 0.5) * 0.35;
+      pointerTilt = ((e.clientX - r.left) / r.width - 0.5) * 0.3;
     });
     stage.addEventListener('pointerleave', () => (pointerTilt = 0));
   }
