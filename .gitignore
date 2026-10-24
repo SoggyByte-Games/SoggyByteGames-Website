@@ -1,0 +1,27 @@
+node_modules/
+dist/
+.vite/
+*.log
+.DS_Store
+Thumbs.db
+
+# Secrets and local configuration must never be committed.
+.env
+.env.*
+!.env.example
+
+# Game project material never belongs in this public repository.
+*.unity
+*.prefab
+*.meta
+*.asset
+*.cs
+*.blend
+*.blend1
+*.psd
+*.fbx
+*.unitypackage
+Library/
+Temp/
+Logs/
+UserSettings/

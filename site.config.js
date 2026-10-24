@@ -1,0 +1,85 @@
+/**
+ * Central site configuration.
+ *
+ * Every studio fact, link and contact detail shown on the website comes from
+ * this file. Anything left empty ('' or []) is simply not rendered, so the site
+ * never shows a broken link, a fake profile or placeholder people.
+ *
+ * Run `npm run check:config` to list the values that are still missing.
+ */
+export default {
+  studio: {
+    name: 'SoggyByte Games',
+    shortName: 'SoggyByte',
+    // Public website address, e.g. 'https://www.example.com' (no trailing slash).
+    // Needed for canonical URLs, social share previews and the sitemap.
+    siteUrl: '',
+    // Shown in search results and link previews.
+    description:
+      'SoggyByte Games is a game studio. Our current project, DoNOTSpill, is coming soon to Steam.',
+  },
+
+  contact: {
+    // Public contact address, e.g. 'hello@example.com'. Renders as a mailto: link.
+    email: '',
+    // Address for copyright / IP notices. Falls back to `email` when empty.
+    legalEmail: '',
+  },
+
+  // Leave a value empty to hide that link everywhere on the site.
+  social: {
+    youtube: '',
+    instagram: '',
+    linkedin: '',
+  },
+
+  games: [
+    {
+      slug: 'donotspill',
+      title: 'DoNOTSpill',
+      // Title split for the typographic treatment: Do · NOT · Spill
+      titleParts: ['Do', 'NOT', 'Spill'],
+      status: 'In development',
+      platforms: ['PC'],
+      tagline: 'Hold it together.',
+      summary:
+        'Our current project. We are keeping the details close for now. More will be revealed when it is ready to be seen.',
+      // Real Steam store URL, e.g. 'https://store.steampowered.com/app/000000/DoNOTSpill/'.
+      // While empty, the Steam call-to-action stays locked as "Coming soon".
+      steamUrl: '',
+      // Approved, spoiler-free media exported for the web. Paths are relative to /public.
+      // Example: keyArt: 'media/donotspill/key-art.webp'
+      media: {
+        keyArt: '',
+        keyArtAlt: '',
+        trailerMp4: '',
+        trailerPoster: '',
+        screenshots: [], // [{ src: 'media/donotspill/shot-01.webp', alt: '...' }]
+      },
+    },
+  ],
+
+  // Verified team members only. The section stays hidden while this is empty.
+  // { name: 'Full Name', role: 'Role', portrait: 'media/team/name.webp', links: [{ label: 'LinkedIn', url: 'https://...' }] }
+  team: [],
+
+  // Published announcements only. The section stays hidden while this is empty.
+  // { date: '2026-01-31', title: 'Headline', summary: 'One or two sentences.', url: 'https://...' }
+  news: [],
+
+  legal: {
+    // Keep true until the legal pages have been reviewed by a qualified professional.
+    // While true, every legal page shows a visible "draft" notice.
+    draft: true,
+    // Registered legal name of the business or person operating the site.
+    operatorName: '',
+    // Registered business address (for KVKK / GDPR controller identification).
+    operatorAddress: '',
+    // Country whose law governs the Terms of Use, e.g. 'the Republic of Türkiye'.
+    governingLaw: '',
+    // Company that hosts the website, e.g. 'GitHub, Inc. (GitHub Pages)'.
+    hostingProvider: '',
+    // Date the current versions of the legal pages take effect, e.g. '2026-11-01'.
+    effectiveDate: '',
+  },
+};
