@@ -35,7 +35,7 @@ export function head(cfg, base, page) {
 <meta name="description" content="${esc(description)}" />
 <meta name="referrer" content="strict-origin-when-cross-origin" />
 <meta name="theme-color" content="#0b0b0c" />
-<meta name="color-scheme" content="dark light" />
+<meta name="color-scheme" content="dark" />
 ${page.noindex ? '<meta name="robots" content="noindex" />' : ''}
 ${url ? `<link rel="canonical" href="${esc(url)}" />` : ''}
 <meta property="og:type" content="website" />
