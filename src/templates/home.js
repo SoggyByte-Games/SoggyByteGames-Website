@@ -58,13 +58,13 @@ function about(cfg) {
   <div class="container about__grid">
     <p class="kicker" data-reveal><span class="kicker__num">01</span> The Studio</p>
     <h2 class="about__title" id="about-title">
-      <span class="fill-line" data-fill>Games made</span>
-      <span class="fill-line" data-fill>with steady hands</span>
-      <span class="fill-line" data-fill>and soggy bytes.</span>
+      <span class="fill-line" data-fill>Soaked in the</span>
+      <span class="fill-line" data-fill>digital world,</span>
+      <span class="fill-line" data-fill>but never sunk!</span>
     </h2>
     <div class="about__body">
-      <p data-reveal>${esc(cfg.studio.name)} is a game studio built around one idea: the best moments in games are the ones you feel in your hands.</p>
-      <p data-reveal>We care about feel. Timing, weight and the half-second before everything goes wrong. Our current project, <a class="inline-link" href="#games">${esc(game.title)}</a>, puts all of that on the back of a scooter.</p>
+      <p data-reveal>${esc(cfg.studio.name)} is a two-person studio from ${esc((cfg.studio.location || '').split(',')[0] || 'Istanbul')}. We make games about the kind of chaos you only survive together.</p>
+      <p data-reveal>Our current game, <a class="inline-link" href="#games">${esc(game.title)}</a>, puts two players on one scooter with a hot order in between. One steers, the other keeps the food steady, and every bump, hill and wrong turn becomes something you have to talk through. Things will get messy. That's the point. Just don't spill.</p>
       ${facts(cfg)}
     </div>
   </div>

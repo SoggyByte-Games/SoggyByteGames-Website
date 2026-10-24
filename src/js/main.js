@@ -5,6 +5,7 @@ import '../styles/layout.css';
 import '../styles/sections.css';
 import { initNav } from './nav.js';
 import { initLegal } from './legal.js';
+import { startAtTop, initAnchorLinks } from './scroll.js';
 
 window.__sb = true; // tells the boot script that JS started correctly
 
@@ -16,6 +17,8 @@ reducedQuery.addEventListener?.('change', () => root.classList.toggle('reduced-m
 // Copyright year always reflects the visitor's current year.
 for (const el of document.querySelectorAll('[data-year]')) el.textContent = String(new Date().getFullYear());
 
+startAtTop();
+initAnchorLinks();
 initNav();
 initLegal();
 

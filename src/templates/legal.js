@@ -67,7 +67,7 @@ const PAGES = {
 <p><strong>International transfer:</strong> GitHub, Inc. is based in the United States, so this technical data is processed outside Türkiye. ${tbc('transfer mechanism relied on under KVKK Art. 9')}</p>
 
 <h2 id="email">4. When you email us</h2>
-<p>If you contact us by email, we receive your email address, name (if included) and the contents of your message. We use this only to read and reply to you, and we delete messages once we no longer need them for that purpose. Your email is received and stored by our email service provider, ${f.mail}, which may process it on servers outside Türkiye. ${tbc('transfer basis for email data under KVKK Art. 9')}</p>
+<p>If you contact us by email, we receive your email address, name (if included) and the contents of your message. We use this only to read and reply to you. We delete messages no later than two years after our correspondence has ended. Your email is received and stored by our email service provider, ${f.mail}, which may process it on servers outside Türkiye. ${tbc('transfer basis for email data under KVKK Art. 9')}</p>
 <p><strong>Legal basis:</strong> processing necessary to respond to your request (KVKK Art. 5(2)(c) and (f); GDPR Art. 6(1)(b) and (f)).</p>
 
 <h2 id="links">5. Links to other websites</h2>

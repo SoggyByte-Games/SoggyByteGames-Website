@@ -33,7 +33,7 @@ export default {
   social: {
     youtube: 'https://www.youtube.com/@SoggyByte',
     instagram: 'https://www.instagram.com/soggybytegames/',
-    linkedin: '',
+    linkedin: 'https://www.linkedin.com/company/soggybytegames/',
   },
 
   games: [

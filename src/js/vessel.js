@@ -245,11 +245,6 @@ export function initVessel(canvas, { reduced = false } = {}) {
     c.moveTo(BOX_W / 2 + 0.012, -WALL);
     c.lineTo(BOX_W / 2 + 0.012, -WALL * 0.45);
     c.stroke();
-    // A small brand detail on the box: the studio's droplet.
-    c.fillStyle = 'rgba(255, 91, 46, 0.9)';
-    c.beginPath();
-    c.arc(BOX_W * 0.32, -WALL * 0.22, 0.012, 0, Math.PI * 2);
-    c.fill();
 
     // Where the burger's top is, in screen space, for the steam.
     const m = c.getTransform();

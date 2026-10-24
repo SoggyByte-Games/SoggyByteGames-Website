@@ -1,40 +1,14 @@
 /**
- * Legal pages: always start at the top, and switch between legal pages in place
- * (fade + scroll back to the title) so the visitor never lands mid-page or in the footer.
+ * Legal pages: switch between legal pages in place (glide back to the top and
+ * cross-fade the content) so the visitor never lands mid-page or in the footer.
  */
+import { scrollToTop } from './scroll.js';
+
 const LEGAL_PATH = /\/(privacy|terms|intellectual-property|cookies)\/(index\.html)?$/;
 
 export function initLegal() {
   if (!document.querySelector('.legal')) return;
   const reduced = () => document.documentElement.classList.contains('reduced-motion');
-
-  // Scrolling the root element into view also reaches an outer page that scrolls
-  // (e.g. when the site is shown embedded), not just this window.
-  const scrollTop = (smooth = false) => {
-    scrollTo({ top: 0, behavior: smooth ? 'smooth' : 'auto' });
-    document.documentElement.scrollIntoView({ block: 'start', behavior: smooth ? 'smooth' : 'auto' });
-  };
-
-  // Some browsers and embedded viewers restore the previous page's scroll position.
-  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-  const toTop = () => {
-    if (!location.hash) scrollTop();
-  };
-  toTop();
-  addEventListener('load', toTop);
-  addEventListener('pageshow', toTop);
-  // Late restorations: keep the page at the top until the visitor scrolls themselves.
-  let interacted = false;
-  for (const type of ['wheel', 'touchstart', 'keydown', 'pointerdown']) {
-    addEventListener(type, () => (interacted = true), { once: true, passive: true });
-  }
-  const until = performance.now() + 1500;
-  const guard = () => {
-    if (interacted || location.hash) return;
-    if (scrollY > 0) scrollTop();
-    if (performance.now() < until) requestAnimationFrame(guard);
-  };
-  requestAnimationFrame(guard);
 
   let busy = false;
   let shownPath = location.pathname;
@@ -43,7 +17,7 @@ export function initLegal() {
     const current = document.querySelector('.legal');
     const title = () => document.getElementById('legal-title');
     const goTop = () => {
-      scrollTop(!reduced());
+      scrollToTop(!reduced());
       title()?.focus({ preventScroll: true });
     };
     if (url.pathname === shownPath) {
@@ -53,7 +27,7 @@ export function initLegal() {
     busy = true;
     try {
       // Glide back to the top while the next page loads, then cross-fade the content in place.
-      scrollTop(!reduced());
+      scrollToTop(!reduced());
       const settled = new Promise((resolve) => {
         const t0 = performance.now();
         const tick = () =>
@@ -74,7 +48,7 @@ export function initLegal() {
       shownPath = url.pathname;
       if (push) history.pushState({ legal: true }, '', url.href);
       title()?.setAttribute('tabindex', '-1');
-      scrollTop();
+      scrollToTop();
       title()?.focus({ preventScroll: true });
       requestAnimationFrame(() => requestAnimationFrame(() => next.classList.remove('is-entering')));
     } catch {
