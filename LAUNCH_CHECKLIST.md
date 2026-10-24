@@ -8,15 +8,16 @@ Run `npm run check:config` to see which of these are still open.
 
 - [ ] **Website address** → `studio.siteUrl` (canonical URLs, share previews)
 - [x] **Contact email** → `soggybytegames@gmail.com`
-- [ ] **YouTube** URL → `social.youtube`
+- [x] **YouTube** → https://www.youtube.com/@SoggyByte
 - [ ] **Instagram** URL → `social.instagram`
 - [ ] **LinkedIn** URL → `social.linkedin`
 - [ ] **Steam store URL** → `games[0].steamUrl` (until then the CTA stays locked as "Coming soon")
 - [ ] **DoNOTSpill media**: approved, spoiler-free key art, screenshots and/or a short trailer
       exported from the Unity project (see README → "Adding game media safely")
 - [x] **Team portraits**: two photos added (cropped, GPS/EXIF metadata removed, bystanders faded out)
-- [ ] **Team names and roles** for `media/team/member-1.webp` and `member-2.webp`, plus optional links
-- [ ] Confirm both people agree to their photo being public
+- [x] **Team names and LinkedIn**: Barkın Ali Lüküslü, Nur Aslan
+- [ ] **Team roles** (shown under each name)
+- [x] Both people agreed to their photo being public
 - [ ] **News**: only once there is a real announcement
 
 ## 2. Copy to approve
@@ -31,11 +32,11 @@ These are written for the site but are brand voice, not verified facts. Please c
 
 ## 3. Legal facts to confirm (all pages show a "Draft" notice until `legal.draft = false`)
 
-- [ ] Registered legal name of the operator (company or individual) → `legal.operatorName`
-- [ ] Registered business address → `legal.operatorAddress`
-- [ ] Governing law / competent courts for the Terms of Use → `legal.governingLaw`
-- [ ] Hosting provider name → `legal.hostingProvider`; its privacy policy link and log retention
-- [ ] Whether hosting logs are processed outside Türkiye, and the KVKK Art. 9 transfer basis
+- [x] Operator: Barkın Ali Lüküslü and Nur Aslan as individuals (no company yet). Update when the şahıs şirketi is registered
+- [ ] No business address exists yet. Ask the lawyer whether a contact address is needed for the KVKK notice
+- [x] Governing law: Türkiye; courts: Istanbul (Çağlayan). Lawyer to confirm
+- [x] Hosting: GitHub Pages (domain registered at Squarespace); GitHub processes data in the US
+- [ ] KVKK Art. 9 transfer basis for GitHub (US) and Gmail
 - [x] Email provider: Google (Gmail)
 - [ ] How long email correspondence is kept, and the KVKK Art. 9 basis for Gmail's processing abroad
 - [ ] Confirm the hosting provider sets no cookies on the domain

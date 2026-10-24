@@ -37,6 +37,18 @@ function hero(cfg) {
 const drips = (variant) =>
   `<div class="drips drips--${variant}" aria-hidden="true" data-drips="${variant}"><svg preserveAspectRatio="none"><path/></svg></div>`;
 
+/** Small fact list under the Studio copy (only facts set in the config). */
+function facts(cfg) {
+  const rows = [];
+  if (cfg.studio.founded) {
+    const d = new Date(`${cfg.studio.founded}T12:00:00Z`);
+    const label = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(d);
+    rows.push(`<div><dt>Founded</dt><dd><time datetime="${esc(cfg.studio.founded)}">${label}</time></dd></div>`);
+  }
+  if (cfg.games[0]) rows.push(`<div><dt>Now making</dt><dd>${esc(cfg.games[0].title)}</dd></div>`);
+  return rows.length ? `<dl class="about__facts" data-reveal>${rows.join('')}</dl>` : '';
+}
+
 function about(cfg) {
   const game = cfg.games[0];
   return `<section class="about" id="studio" aria-labelledby="about-title">
@@ -52,6 +64,7 @@ function about(cfg) {
     <div class="about__body">
       <p data-reveal>${esc(cfg.studio.name)} is a game studio built around one idea: the best moments in games are the ones you feel in your hands.</p>
       <p data-reveal>We care about feel. Timing, weight and the half-second before everything goes wrong. We would rather show than tell, so our current project, <a class="inline-link" href="#games">${esc(game.title)}</a>, is staying under wraps a little longer.</p>
+      ${facts(cfg)}
     </div>
   </div>
   ${team(cfg)}
@@ -77,18 +90,19 @@ function team(cfg) {
       const portrait = m.portrait
         ? `<img src="/${esc(m.portrait)}" alt="${esc(alt)}" loading="lazy" decoding="async" width="720" height="900" />`
         : '';
-      const caption = m.name
-        ? `<figcaption class="crew__caption">
-            <span class="crew__name">${esc(m.name)}</span>
+      const caption =
+        m.name || links
+          ? `<figcaption class="crew__caption">
+            ${m.name ? `<span class="crew__name">${esc(m.name)}</span>` : ''}
             ${m.role ? `<span class="crew__role">${esc(m.role)}</span>` : ''}
+            ${links ? `<ul class="crew__links">${links}</ul>` : ''}
           </figcaption>`
-        : '';
+          : '';
       return `<li class="crew__member" data-reveal data-drift="${i % 2 ? 0.12 : -0.06}">
         <figure class="crew__figure">
           <div class="crew__portrait crew__portrait--${(i % 3) + 1}">${portrait}</div>
           ${caption}
         </figure>
-        ${links ? `<ul class="crew__links">${links}</ul>` : ''}
       </li>`;
     })
     .join('');

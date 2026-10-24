@@ -14,6 +14,8 @@ export default {
     // Public website address, e.g. 'https://www.example.com' (no trailing slash).
     // Needed for canonical URLs, social share previews and the sitemap.
     siteUrl: '',
+    // Shown in the Studio section. Informal until the business is registered.
+    founded: '2026-10-06',
     // Shown in search results and link previews.
     description:
       'SoggyByte Games is a game studio. Our current project, DoNOTSpill, is coming soon to Steam.',
@@ -28,7 +30,7 @@ export default {
 
   // Leave a value empty to hide that link everywhere on the site.
   social: {
-    youtube: '',
+    youtube: 'https://www.youtube.com/@SoggyByte',
     instagram: '',
     linkedin: '',
   },
@@ -63,8 +65,18 @@ export default {
   // Name and role captions appear as soon as they are filled in.
   // { name: 'Full Name', role: 'Role', portrait: 'media/team/name.webp', links: [{ label: 'LinkedIn', url: 'https://...' }] }
   team: [
-    { name: '', role: '', portrait: 'media/team/member-1.webp', links: [] },
-    { name: '', role: '', portrait: 'media/team/member-2.webp', links: [] },
+    {
+      name: 'Barkın Ali Lüküslü',
+      role: '',
+      portrait: 'media/team/member-1.webp',
+      links: [{ label: 'LinkedIn', url: 'https://www.linkedin.com/in/barkinalilukuslu/' }],
+    },
+    {
+      name: 'Nur Aslan',
+      role: '',
+      portrait: 'media/team/member-2.webp',
+      links: [{ label: 'LinkedIn', url: 'https://www.linkedin.com/in/nuraslan/' }],
+    },
   ],
 
   // Published announcements only. The section stays hidden while this is empty.
@@ -75,14 +87,20 @@ export default {
     // Keep true until the legal pages have been reviewed by a qualified professional.
     // While true, every legal page shows a visible "draft" notice.
     draft: true,
-    // Registered legal name of the business or person operating the site.
-    operatorName: '',
-    // Registered business address (for KVKK / GDPR controller identification).
+    // Who operates the site. SoggyByte Games is not a registered company yet,
+    // so the operators are the two founders as individuals.
+    operatorName: 'Barkın Ali Lüküslü and Nur Aslan',
+    // True while SoggyByte Games is a name used by individuals, not a registered company.
+    unregistered: true,
+    // Business address (for KVKK / GDPR controller identification). Left empty: none exists yet.
     operatorAddress: '',
-    // Country whose law governs the Terms of Use, e.g. 'the Republic of Türkiye'.
-    governingLaw: '',
-    // Company that hosts the website, e.g. 'GitHub, Inc. (GitHub Pages)'.
-    hostingProvider: '',
+    // Law governing the Terms of Use, and the courts for disputes.
+    governingLaw: 'the Republic of Türkiye',
+    courts: 'Istanbul (Çağlayan) Courts and Enforcement Offices',
+    // Company that hosts the website.
+    hostingProvider: 'GitHub, Inc. (GitHub Pages)',
+    // Where the domain name is registered.
+    domainRegistrar: 'Squarespace',
     // Service that receives mail sent to contact.email.
     emailProvider: 'Google (Gmail)',
     // Date the current versions of the legal pages take effect, e.g. '2026-11-01'.

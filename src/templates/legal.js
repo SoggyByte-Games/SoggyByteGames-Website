@@ -19,9 +19,17 @@ function facts(cfg) {
   const legalEmail = cfg.contact.legalEmail?.trim() || email;
   return {
     studio: esc(cfg.studio.name),
-    operator: l.operatorName ? esc(l.operatorName) : tbc('registered legal name of the operator'),
-    address: l.operatorAddress ? esc(l.operatorAddress) : tbc('registered business address'),
-    law: l.governingLaw ? esc(l.governingLaw) : tbc('governing law and competent courts'),
+    operator: l.operatorName ? esc(l.operatorName) : tbc('legal name of the operator'),
+    // Optional: there is no business address while the studio is unregistered.
+    address: l.operatorAddress ? `, ${esc(l.operatorAddress)}` : '',
+    unregistered: l.unregistered
+      ? ` ${esc(cfg.studio.name)} is the name under which they make games together; it is not a registered company.`
+      : '',
+    owner: l.operatorName
+      ? `${esc(cfg.studio.name)} (${esc(l.operatorName)})`
+      : esc(cfg.studio.name),
+    law: l.governingLaw ? esc(l.governingLaw) : tbc('governing law'),
+    courts: l.courts ? esc(l.courts) : tbc('competent courts'),
     host: l.hostingProvider ? esc(l.hostingProvider) : tbc('name of the hosting provider'),
     effective: l.effectiveDate ? esc(l.effectiveDate) : tbc('effective date'),
     mail: l.emailProvider ? esc(l.emailProvider) : tbc('email service provider'),
@@ -41,7 +49,7 @@ const PAGES = {
 <p class="legal__lede">This policy explains what personal data is processed when you visit ${f.site}, why, and what rights you have. We have built this website to collect as little as possible.</p>
 
 <h2 id="who-we-are">1. Who is responsible</h2>
-<p>This website is operated by ${f.operator} (“${f.studio}”, “we”, “us”), ${f.address}. For the purposes of the Turkish Personal Data Protection Law No. 6698 (“KVKK”) and, where it applies, the EU/UK General Data Protection Regulation (“GDPR”), we act as the data controller for the processing described here.</p>
+<p>This website is operated by ${f.operator} (“${f.studio}”, “we”, “us”)${f.address}.${f.unregistered} For the purposes of the Turkish Personal Data Protection Law No. 6698 (“KVKK”) and, where it applies, the EU/UK General Data Protection Regulation (“GDPR”), we act as the data controllers for the processing described here.</p>
 <p>You can reach us about privacy at ${f.contact}.</p>
 
 <h2 id="what-we-collect">2. What this website does and does not do</h2>
@@ -54,9 +62,9 @@ const PAGES = {
 
 <h2 id="server-logs">3. Technical data processed by our hosting provider</h2>
 <p>Like every website, ours is delivered by a hosting provider: ${f.host}. When your browser requests a page, the provider’s servers necessarily receive technical information such as your IP address, the date and time of the request, the page requested, and your browser’s user-agent string. This is required to deliver the website and to keep it secure (for example, to detect and block abuse).</p>
-<p>We do not use this data to identify you or build a profile. The provider processes it under its own policies and retention periods: ${tbc('hosting provider’s privacy policy link and log retention period')}.</p>
+<p>We do not use this data to identify you or build a profile. GitHub records visitors’ IP addresses for security purposes and processes this data under its own terms, described in the <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener noreferrer">GitHub General Privacy Statement</a>.</p>
 <p><strong>Legal basis:</strong> our legitimate interest in operating a secure website (KVKK Art. 5(2)(f); GDPR Art. 6(1)(f)).</p>
-<p><strong>International transfer:</strong> ${tbc('whether the hosting provider stores or processes this data outside Türkiye, and the transfer mechanism relied on under KVKK Art. 9')}.</p>
+<p><strong>International transfer:</strong> GitHub, Inc. is based in the United States, so this technical data is processed outside Türkiye. ${tbc('transfer mechanism relied on under KVKK Art. 9')}</p>
 
 <h2 id="email">4. When you email us</h2>
 <p>If you contact us by email, we receive your email address, name (if included) and the contents of your message. We use this only to read and reply to you, and we keep it only as long as needed for that purpose: ${tbc('retention period for email correspondence')}. Your email is received and stored by our email service provider, ${f.mail}, which may process it on servers outside Türkiye: ${tbc('transfer basis for email data under KVKK Art. 9')}.</p>
@@ -81,13 +89,13 @@ const PAGES = {
     title: 'Terms of Use',
     description: 'The terms that apply when you use the SoggyByte Games website.',
     body: (f) => `
-<p class="legal__lede">These terms apply to your use of ${f.site}, operated by ${f.operator} (“${f.studio}”, “we”, “us”). By using the website you agree to them. If you do not agree, please do not use the website.</p>
+<p class="legal__lede">These terms apply to your use of ${f.site}, operated by ${f.operator} (“${f.studio}”, “we”, “us”).${f.unregistered} By using the website you agree to them. If you do not agree, please do not use the website.</p>
 
 <h2 id="purpose">1. What this website is</h2>
 <p>This website presents our studio and our games for information only. It does not sell products, and nothing on it is an offer to enter into a contract. Purchases of our games, when available, take place on third-party stores under their own terms.</p>
 
 <h2 id="content">2. Our content</h2>
-<p>All content on this website — including our name, logos, game titles, artwork, screenshots, video, audio, text and design — belongs to ${f.studio} or is used with permission, and is protected by intellectual property laws. Viewing it does not give you any licence to use it. Please read our <a href="../intellectual-property/">Intellectual Property &amp; Copyright Notice</a> for details.</p>
+<p>All content on this website — including our name, logos, game titles, artwork, screenshots, video, audio, text and design — belongs to ${f.owner} or is used with permission, and is protected by intellectual property laws. Viewing it does not give you any licence to use it. Please read our <a href="../intellectual-property/">Intellectual Property &amp; Copyright Notice</a> for details.</p>
 
 <h2 id="acceptable-use">3. Acceptable use</h2>
 <p>You agree not to:</p>
@@ -108,7 +116,7 @@ const PAGES = {
 <p>The website is provided “as is” and “as available”. We may change, suspend or discontinue it at any time. To the extent permitted by applicable law, we are not liable for indirect or consequential loss arising from your use of the website. Nothing in these terms limits liability that cannot be limited under applicable law, including mandatory consumer protection rules.</p>
 
 <h2 id="law">7. Governing law</h2>
-<p>These terms are governed by the laws of ${f.law}.</p>
+<p>These terms are governed by the laws of ${f.law}. The ${f.courts} have jurisdiction over any dispute arising from them. This does not affect mandatory rules that allow consumers to bring proceedings in the courts or consumer arbitration committees where they live.</p>
 
 <h2 id="changes">8. Changes and contact</h2>
 <p>We may update these terms from time to time. The version published on this page applies from its effective date. Questions: ${f.contact}.</p>
@@ -122,7 +130,7 @@ const PAGES = {
 <p class="legal__lede">${f.studio} creates original games and creative work. This notice explains what we own, what you may and may not do with it, and how to contact us about intellectual property.</p>
 
 <h2 id="ownership">1. What is protected</h2>
-<p>Unless stated otherwise, the following are owned by ${f.studio} or used under licence, and are protected by copyright and other intellectual property laws:</p>
+<p>Unless stated otherwise, the following are owned by ${f.owner} or used under licence, and are protected by copyright and other intellectual property laws:</p>
 <ul>
   <li>the ${f.studio} name, logos and brand assets;</li>
   <li>the names and logos of our games, including DoNOTSpill;</li>
