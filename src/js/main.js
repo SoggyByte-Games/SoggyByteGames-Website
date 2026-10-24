@@ -4,6 +4,7 @@ import '../styles/base.css';
 import '../styles/layout.css';
 import '../styles/sections.css';
 import { initNav } from './nav.js';
+import { initLegal } from './legal.js';
 
 window.__sb = true; // tells the boot script that JS started correctly
 
@@ -16,6 +17,7 @@ reducedQuery.addEventListener?.('change', () => root.classList.toggle('reduced-m
 for (const el of document.querySelectorAll('[data-year]')) el.textContent = String(new Date().getFullYear());
 
 initNav();
+initLegal();
 
 async function initHome() {
   const [{ initLiquid }, { initVessel }, { initMotion }] = await Promise.all([

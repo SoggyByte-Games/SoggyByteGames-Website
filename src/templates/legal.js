@@ -24,6 +24,7 @@ function facts(cfg) {
     law: l.governingLaw ? esc(l.governingLaw) : tbc('governing law and competent courts'),
     host: l.hostingProvider ? esc(l.hostingProvider) : tbc('name of the hosting provider'),
     effective: l.effectiveDate ? esc(l.effectiveDate) : tbc('effective date'),
+    mail: l.emailProvider ? esc(l.emailProvider) : tbc('email service provider'),
     contact: email ? `<a href="mailto:${esc(email)}">${esc(email)}</a>` : tbc('contact email address'),
     legalContact: legalEmail
       ? `<a href="mailto:${esc(legalEmail)}">${esc(legalEmail)}</a>`
@@ -58,7 +59,7 @@ const PAGES = {
 <p><strong>International transfer:</strong> ${tbc('whether the hosting provider stores or processes this data outside Türkiye, and the transfer mechanism relied on under KVKK Art. 9')}.</p>
 
 <h2 id="email">4. When you email us</h2>
-<p>If you contact us by email, we receive your email address, name (if included) and the contents of your message. We use this only to read and reply to you, and we keep it only as long as needed for that purpose: ${tbc('retention period for email correspondence')}. Your email will also be processed by our email service provider: ${tbc('email service provider')}.</p>
+<p>If you contact us by email, we receive your email address, name (if included) and the contents of your message. We use this only to read and reply to you, and we keep it only as long as needed for that purpose: ${tbc('retention period for email correspondence')}. Your email is received and stored by our email service provider, ${f.mail}, which may process it on servers outside Türkiye: ${tbc('transfer basis for email data under KVKK Art. 9')}.</p>
 <p><strong>Legal basis:</strong> processing necessary to respond to your request (KVKK Art. 5(2)(c) and (f); GDPR Art. 6(1)(b) and (f)).</p>
 
 <h2 id="links">5. Links to other websites</h2>

@@ -54,9 +54,11 @@ function about(cfg) {
       <p data-reveal>We care about feel. Timing, weight and the half-second before everything goes wrong. We would rather show than tell, so our current project, <a class="inline-link" href="#games">${esc(game.title)}</a>, is staying under wraps a little longer.</p>
     </div>
   </div>
+  ${team(cfg)}
 </section>`;
 }
 
+/** Team portraits, shown inside the Studio section. Captions appear once names are set. */
 function team(cfg) {
   if (!cfg.team.length) return '';
   const people = cfg.team
@@ -69,30 +71,34 @@ function team(cfg) {
             `<li><a class="footer-link" href="${esc(l.url)}" ${extAttrs}>${esc(l.label)}${externalIcon}<span class="visually-hidden"> (opens in a new tab)</span></a></li>`,
         )
         .join('');
+      const alt = m.name
+        ? `Portrait of ${m.name}`
+        : `Portrait of a member of the ${cfg.studio.name} team`;
       const portrait = m.portrait
-        ? `<img src="/${esc(m.portrait)}" alt="Portrait of ${esc(m.name)}" loading="lazy" decoding="async" width="600" height="750" />`
-        : `<span class="person__initials" aria-hidden="true">${esc(
-            m.name
-              .split(/\s+/)
-              .map((p) => p[0])
-              .slice(0, 2)
-              .join(''),
-          )}</span>`;
-      return `<li class="person" data-reveal style="--i:${i}">
-        <figure class="person__portrait">${portrait}</figure>
-        <h3 class="person__name">${esc(m.name)}</h3>
-        <p class="person__role">${esc(m.role)}</p>
-        ${links ? `<ul class="person__links">${links}</ul>` : ''}
+        ? `<img src="/${esc(m.portrait)}" alt="${esc(alt)}" loading="lazy" decoding="async" width="720" height="900" />`
+        : '';
+      const caption = m.name
+        ? `<figcaption class="crew__caption">
+            <span class="crew__name">${esc(m.name)}</span>
+            ${m.role ? `<span class="crew__role">${esc(m.role)}</span>` : ''}
+          </figcaption>`
+        : '';
+      return `<li class="crew__member" data-reveal data-drift="${i % 2 ? 0.12 : -0.06}">
+        <figure class="crew__figure">
+          <div class="crew__portrait crew__portrait--${(i % 3) + 1}">${portrait}</div>
+          ${caption}
+        </figure>
+        ${links ? `<ul class="crew__links">${links}</ul>` : ''}
       </li>`;
     })
     .join('');
-  return `<section class="team" id="team" aria-labelledby="team-title">
-  <div class="container">
-    <p class="kicker" data-reveal><span class="kicker__num">—</span> Our Team</p>
-    <h2 class="section-title" id="team-title" data-reveal>The people behind the mess.</h2>
-    <ul class="team__list">${people}</ul>
-  </div>
-</section>`;
+  return `<div class="container crew" id="team">
+    <div class="crew__head">
+      <p class="kicker" data-reveal>The Team</p>
+      <h3 class="crew__title" data-reveal>The people behind the&nbsp;mess.</h3>
+    </div>
+    <ul class="crew__list crew__list--${Math.min(cfg.team.length, 3)}">${people}</ul>
+  </div>`;
 }
 
 function steamCta(game) {
@@ -245,5 +251,5 @@ function contact(cfg) {
 }
 
 export function home(cfg) {
-  return [hero(cfg), about(cfg), team(cfg), games(cfg), news(cfg), contact(cfg)].join('\n');
+  return [hero(cfg), about(cfg), games(cfg), news(cfg), contact(cfg)].join('\n');
 }

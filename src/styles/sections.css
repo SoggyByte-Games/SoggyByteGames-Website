@@ -277,60 +277,135 @@
 }
 
 /* =========================================================
-   TEAM (rendered only when verified members are configured)
+   TEAM (inside the Studio section; only with verified members)
    ========================================================= */
-.team {
-  background: var(--paper);
-  color: var(--ink);
-  padding: 0 0 clamp(7rem, 14vw, 12rem);
+.crew {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 2.5rem var(--gutter);
+  align-items: start;
+  margin-top: clamp(6rem, 14vw, 12rem);
 }
-.team .kicker {
+.crew__head {
+  grid-column: 1 / span 4;
+  display: grid;
+  gap: 1.25rem;
+  position: sticky;
+  top: calc(var(--header-h) + 2rem);
+}
+.crew .kicker {
   color: var(--smoke);
-  margin-bottom: 1.5rem;
 }
-.team__list {
-  margin-top: clamp(2.5rem, 6vw, 5rem);
+.crew__title {
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: clamp(1.8rem, 3.6vw, 3.4rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+.crew__list {
+  grid-column: 6 / -1;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
-  gap: 3rem var(--gutter);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.5rem, 3vw, 3rem);
 }
-.person__portrait {
+.crew__list--1 {
+  grid-template-columns: minmax(0, 0.6fr);
+}
+.crew__list--3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+/* Staggered heights give the pair an editorial rhythm. */
+.crew__member:nth-child(even) {
+  margin-top: clamp(3rem, 9vw, 8rem);
+}
+.crew__figure {
+  display: grid;
+  gap: 1rem;
+}
+.crew__portrait {
+  position: relative;
   aspect-ratio: 4 / 5;
-  border-radius: 46% 54% 40% 60% / 38% 42% 58% 62%;
+  max-width: 100%;
   overflow: hidden;
-  background: var(--paper-2);
-  display: grid;
-  place-items: center;
-  margin-bottom: 1.25rem;
-  transition: border-radius 0.9s var(--ease-out);
+  background: var(--ink);
+  border-radius: 38% 62% 44% 56% / 32% 40% 60% 68%;
+  transition: border-radius 1.2s var(--ease-out);
+  animation: blob 12s ease-in-out infinite alternate;
 }
-.person:hover .person__portrait {
-  border-radius: 54% 46% 58% 42% / 44% 58% 42% 56%;
+.crew__portrait--2 {
+  animation-delay: -6s;
+  animation-direction: alternate-reverse;
 }
-.person__portrait img {
+.crew__portrait--3 {
+  animation-delay: -3s;
+}
+/* Slow liquid wobble, echoing the droplets in the logo. */
+@keyframes blob {
+  0% { border-radius: 38% 62% 44% 56% / 32% 40% 60% 68%; }
+  33% { border-radius: 58% 42% 62% 38% / 42% 30% 70% 58%; }
+  66% { border-radius: 44% 56% 36% 64% / 56% 38% 62% 44%; }
+  100% { border-radius: 62% 38% 52% 48% / 36% 58% 42% 64%; }
+}
+.crew__portrait img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: grayscale(1) contrast(1.05);
+  filter: grayscale(1) contrast(1.08) brightness(0.98);
+  transform: scale(1.04);
+  transition:
+    filter 0.9s var(--ease-out),
+    transform 1.2s var(--ease-out);
 }
-.person__initials {
-  font-family: var(--f-display);
-  font-size: 3rem;
-  font-weight: 700;
+.crew__member:hover .crew__portrait img {
+  filter: grayscale(0) contrast(1.02);
+  transform: scale(1);
 }
-.person__name {
+.crew__caption {
+  display: grid;
+  gap: 0.15rem;
+  padding-left: 0.25rem;
+}
+.crew__name {
   font-family: var(--f-display);
   font-weight: 600;
-  font-size: 1.3rem;
+  font-size: clamp(1.05rem, 1.6vw, 1.35rem);
   letter-spacing: -0.02em;
 }
-.person__role {
+.crew__role {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
   color: var(--smoke);
 }
-.person__links {
+.crew__links {
   display: flex;
-  gap: 1rem;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
   margin-top: 0.5rem;
+  padding-left: 0.25rem;
+}
+@media (max-width: 899px) {
+  .crew__head {
+    grid-column: 1 / -1;
+    position: static;
+  }
+  .crew__list {
+    grid-column: 1 / -1;
+  }
+  .crew__list--3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 479px) {
+  .crew__list {
+    gap: 1rem;
+  }
+  .crew__member:nth-child(even) {
+    margin-top: 3rem;
+  }
 }
 
 /* =========================================================
@@ -807,6 +882,22 @@
   max-width: var(--max);
   margin-inline: auto;
   padding: calc(var(--header-h) + clamp(3rem, 9vw, 7rem)) var(--gutter) clamp(5rem, 10vw, 8rem);
+}
+.legal {
+  transition:
+    opacity 0.22s ease,
+    transform 0.45s var(--ease-out);
+}
+.legal.is-leaving {
+  opacity: 0;
+  transform: translateY(-12px);
+}
+.legal.is-entering {
+  opacity: 0;
+  transform: translateY(16px);
+}
+.legal__title:focus {
+  outline: none;
 }
 .legal__head .kicker {
   color: var(--fog);

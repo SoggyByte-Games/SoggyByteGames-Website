@@ -232,6 +232,15 @@ export function initMotion({ reduced, liquid, vessel }) {
     }),
   );
 
+  // Team portraits drift at slightly different speeds.
+  $$('[data-drift]').forEach((el) =>
+    gsap.to(el.querySelector('.crew__figure') || el, {
+      yPercent: Number(el.dataset.drift) * 100,
+      ease: 'none',
+      scrollTrigger: { trigger: el, start: 'top bottom', end: 'bottom top', scrub: true },
+    }),
+  );
+
   // Liquid surface reacts to scroll speed.
   ScrollTrigger.create({
     trigger: '.games',

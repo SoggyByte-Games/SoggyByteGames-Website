@@ -7,14 +7,16 @@ Run `npm run check:config` to see which of these are still open.
 ## 1. Content we still need
 
 - [ ] **Website address** → `studio.siteUrl` (canonical URLs, share previews)
-- [ ] **Contact email** → `contact.email` (and `contact.legalEmail` if different)
+- [x] **Contact email** → `soggybytegames@gmail.com`
 - [ ] **YouTube** URL → `social.youtube`
 - [ ] **Instagram** URL → `social.instagram`
 - [ ] **LinkedIn** URL → `social.linkedin`
 - [ ] **Steam store URL** → `games[0].steamUrl` (until then the CTA stays locked as "Coming soon")
 - [ ] **DoNOTSpill media**: approved, spoiler-free key art, screenshots and/or a short trailer
       exported from the Unity project (see README → "Adding game media safely")
-- [ ] **Team**: names, roles, approved portraits and optional links of people who agree to be listed
+- [x] **Team portraits**: two photos added (cropped, GPS/EXIF metadata removed, bystanders faded out)
+- [ ] **Team names and roles** for `media/team/member-1.webp` and `member-2.webp`, plus optional links
+- [ ] Confirm both people agree to their photo being public
 - [ ] **News**: only once there is a real announcement
 
 ## 2. Copy to approve
@@ -34,7 +36,8 @@ These are written for the site but are brand voice, not verified facts. Please c
 - [ ] Governing law / competent courts for the Terms of Use → `legal.governingLaw`
 - [ ] Hosting provider name → `legal.hostingProvider`; its privacy policy link and log retention
 - [ ] Whether hosting logs are processed outside Türkiye, and the KVKK Art. 9 transfer basis
-- [ ] Email provider used for the contact address, and how long correspondence is kept
+- [x] Email provider: Google (Gmail)
+- [ ] How long email correspondence is kept, and the KVKK Art. 9 basis for Gmail's processing abroad
 - [ ] Confirm the hosting provider sets no cookies on the domain
 - [ ] Effective date → `legal.effectiveDate`
 - [ ] Whether a VERBİS registration or a separate KVKK "aydınlatma metni" format is required for your entity

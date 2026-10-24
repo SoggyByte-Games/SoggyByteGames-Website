@@ -14,6 +14,7 @@ for (const g of cfg.games) {
   need(g.media?.keyArt || g.media?.trailerMp4, `games[${g.slug}].media — approved key art or trailer`);
 }
 need(cfg.team.length, 'team — verified team members (section hidden until added)');
+cfg.team.forEach((m, i) => need(m.name && m.role, `team[${i}] — name and role for ${m.portrait || 'member ' + (i + 1)}`));
 need(!cfg.legal.draft, 'legal.draft — set to false only after legal review');
 need(cfg.legal.operatorName, 'legal.operatorName — registered legal name');
 need(cfg.legal.operatorAddress, 'legal.operatorAddress — registered business address');

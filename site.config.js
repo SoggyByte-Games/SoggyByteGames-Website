@@ -21,7 +21,7 @@ export default {
 
   contact: {
     // Public contact address, e.g. 'hello@example.com'. Renders as a mailto: link.
-    email: '',
+    email: 'soggybytegames@gmail.com',
     // Address for copyright / IP notices. Falls back to `email` when empty.
     legalEmail: '',
   },
@@ -59,9 +59,13 @@ export default {
     },
   ],
 
-  // Verified team members only. The section stays hidden while this is empty.
+  // Verified team members only, shown inside the Studio section. Hidden while empty.
+  // Name and role captions appear as soon as they are filled in.
   // { name: 'Full Name', role: 'Role', portrait: 'media/team/name.webp', links: [{ label: 'LinkedIn', url: 'https://...' }] }
-  team: [],
+  team: [
+    { name: '', role: '', portrait: 'media/team/member-1.webp', links: [] },
+    { name: '', role: '', portrait: 'media/team/member-2.webp', links: [] },
+  ],
 
   // Published announcements only. The section stays hidden while this is empty.
   // { date: '2026-01-31', title: 'Headline', summary: 'One or two sentences.', url: 'https://...' }
@@ -79,6 +83,8 @@ export default {
     governingLaw: '',
     // Company that hosts the website, e.g. 'GitHub, Inc. (GitHub Pages)'.
     hostingProvider: '',
+    // Service that receives mail sent to contact.email.
+    emailProvider: 'Google (Gmail)',
     // Date the current versions of the legal pages take effect, e.g. '2026-11-01'.
     effectiveDate: '',
   },
