@@ -64,10 +64,10 @@ const PAGES = {
 <p>Like every website, ours is delivered by a hosting provider: ${f.host}. When your browser requests a page, the provider’s servers necessarily receive technical information such as your IP address, the date and time of the request, the page requested, and your browser’s user-agent string. This is required to deliver the website and to keep it secure (for example, to detect and block abuse).</p>
 <p>We do not use this data to identify you or build a profile. GitHub records visitors’ IP addresses for security purposes and processes this data under its own terms, described in the <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener noreferrer">GitHub General Privacy Statement</a>.</p>
 <p><strong>Legal basis:</strong> our legitimate interest in operating a secure website (KVKK Art. 5(2)(f); GDPR Art. 6(1)(f)).</p>
-<p><strong>International transfer:</strong> GitHub, Inc. is based in the United States, so this technical data is processed outside Türkiye. ${tbc('transfer mechanism relied on under KVKK Art. 9')}</p>
+<p><strong>International transfer:</strong> GitHub, Inc. is based in the United States, so this technical data is processed on servers outside Türkiye, under GitHub’s own security measures and privacy terms. We do not use these records ourselves and do not share visitor data with anyone else.</p>
 
 <h2 id="email">4. When you email us</h2>
-<p>If you contact us by email, we receive your email address, name (if included) and the contents of your message. We use this only to read and reply to you. We delete messages no later than two years after our correspondence has ended. Your email is received and stored by our email service provider, ${f.mail}, which may process it on servers outside Türkiye. ${tbc('transfer basis for email data under KVKK Art. 9')}</p>
+<p>If you contact us by email, we receive your email address, name (if included) and the contents of your message. We use this only to read and reply to you. We delete messages no later than two years after our correspondence has ended. Your email is received and stored by our email service provider, ${f.mail}, which processes it on servers outside Türkiye under its own security measures and privacy terms. We keep only what we need to reply to you and do not share it with anyone else.</p>
 <p><strong>Legal basis:</strong> processing necessary to respond to your request (KVKK Art. 5(2)(c) and (f); GDPR Art. 6(1)(b) and (f)).</p>
 
 <h2 id="links">5. Links to other websites</h2>

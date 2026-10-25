@@ -33,16 +33,16 @@ These are written for the site but are brand voice, not verified facts. Please c
 ## 3. Legal facts to confirm (all pages show a "Draft" notice until `legal.draft = false`)
 
 - [x] Operator: Barkın Ali Lüküslü and Nur Aslan as individuals (no company yet). Update when the şahıs şirketi is registered
-- [ ] No business address exists yet. Ask the lawyer whether a contact address is needed for the KVKK notice
-- [x] Governing law: Türkiye; courts: Istanbul (Çağlayan). Lawyer to confirm
+- [x] No business address yet: the notice identifies the founders by name and the contact email (update when the company is registered)
+- [x] Governing law: Türkiye; courts: Istanbul (Çağlayan)
 - [x] Hosting: GitHub Pages (domain registered at Squarespace); GitHub processes data in the US
-- [ ] KVKK Art. 9 transfer basis for GitHub (US) and Gmail
+- [x] KVKK Art. 9 (GitHub and Gmail abroad): the team chose to keep both and state the transfer openly in the Privacy Policy. Revisit when the company is founded (business accounts may allow standard contracts)
 - [x] Email provider: Google (Gmail)
 - [x] Email retention: messages deleted no later than two years after the correspondence ends (the team must actually do this, e.g. a yearly clean-up of the Gmail inbox)
 - [ ] Confirm the hosting provider sets no cookies on the domain
 - [ ] Effective date → `legal.effectiveDate`: set to the launch date on launch day
 - [x] VERBİS: not required (confirmed by the team)
-- [ ] **Have a qualified lawyer review all four pages**, then set `legal.draft` to `false`
+- [ ] Draft notice: decide on launch day whether to remove it without a lawyer's review (`legal.draft = false`)
 
 ## 4. Repository and deployment
 
