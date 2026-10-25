@@ -42,7 +42,7 @@ These are written for the site but are brand voice, not verified facts. Please c
 - [ ] Confirm the hosting provider sets no cookies on the domain
 - [ ] Effective date → `legal.effectiveDate`: set to the launch date on launch day
 - [x] VERBİS: not required (confirmed by the team)
-- [ ] Draft notice: decide on launch day whether to remove it without a lawyer's review (`legal.draft = false`)
+- [x] Draft notice: the team decided to keep it for now (`legal.draft = true`). Revisit after a legal review
 
 ## 4. Repository and deployment
 
