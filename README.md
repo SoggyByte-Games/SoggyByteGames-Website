@@ -14,6 +14,7 @@ npm run dev           # local dev server
 npm run build         # production build to dist/ + public-output safety check
 npm run preview       # serve the production build locally
 npm run check:config  # list the launch values that still need to be supplied
+npm run preview:artifact  # self-contained preview pages in .preview/out (for a private Claude artifact)
 ```
 
 ## Where things live
