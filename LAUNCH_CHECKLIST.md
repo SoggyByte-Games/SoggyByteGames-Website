@@ -8,7 +8,7 @@ Run `npm run check:config` to see which of these are still open.
 
 - [x] **Website address** → https://soggybytegames.com (sitemap and share previews use it)
 - [x] **Contact email** → `soggybytegames@gmail.com`
-- [x] **YouTube** → https://www.youtube.com/@SoggyByte
+- [x] **YouTube** → https://www.youtube.com/@SoggyByteGames
 - [x] **Instagram** → https://www.instagram.com/soggybytegames/
 - [x] **LinkedIn** → https://www.linkedin.com/company/soggybytegames/
 - [ ] **Steam store URL** → `games[0].steamUrl` (until then the CTA stays locked as "Coming soon")

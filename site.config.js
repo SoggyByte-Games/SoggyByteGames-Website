@@ -31,7 +31,7 @@ export default {
 
   // Leave a value empty to hide that link everywhere on the site.
   social: {
-    youtube: 'https://www.youtube.com/@SoggyByte',
+    youtube: 'https://www.youtube.com/@SoggyByteGames',
     instagram: 'https://www.instagram.com/soggybytegames/',
     linkedin: 'https://www.linkedin.com/company/soggybytegames/',
   },
