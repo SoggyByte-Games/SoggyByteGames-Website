@@ -78,12 +78,15 @@ export function initNav() {
     .map((a) => document.getElementById(a.hash.slice(1)))
     .filter(Boolean);
   if (!sections.length || !('IntersectionObserver' in window)) return;
+  const inView = new Set();
   const io = new IntersectionObserver(
     (entries) => {
       for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
-        for (const a of links) a.classList.toggle('is-active', a.hash === `#${entry.target.id}`);
+        if (entry.isIntersecting) inView.add(entry.target.id);
+        else inView.delete(entry.target.id);
       }
+      const current = sections.find((s) => inView.has(s.id))?.id;
+      for (const a of links) a.classList.toggle('is-active', a.hash === `#${current}`);
     },
     { rootMargin: '-45% 0px -50% 0px' },
   );

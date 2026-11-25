@@ -14,8 +14,8 @@ export const BOOT_SCRIPT =
 
 function navItems(cfg, base, onHome) {
   const p = onHome ? '' : base;
-  const items = [{ href: `${p}#studio`, label: 'Studio' }];
-  items.push({ href: `${p}#games`, label: 'Games' });
+  const items = [{ href: `${p}#games`, label: 'Games' }];
+  items.push({ href: `${p}#studio`, label: 'Studio' });
   if (cfg.news.length) items.push({ href: `${p}#news`, label: 'News' });
   items.push({ href: `${p}#contact`, label: 'Contact' });
   return items;
