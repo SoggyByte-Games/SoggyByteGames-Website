@@ -19,7 +19,7 @@ export default {
     location: 'Istanbul, Türkiye',
     // Shown in search results and link previews.
     description:
-      'SoggyByte Games is an Istanbul-based game studio making games for PC and mobile. DoNOTSpill, a two-player co-op delivery game, is coming soon to Steam.',
+      'SoggyByte Games is an Istanbul-based game studio. DoNOTSpill, a two-player co-op delivery game, is coming soon to Steam; Purzzle and Swish Happens are coming to iOS and Android.',
   },
 
   contact: {
@@ -66,24 +66,23 @@ export default {
         keyArtHeight: 0,
       },
     },
-    // Mobile games. Leave `title` empty while a game is unannounced: the site then shows
-    // an "Unannounced" card with the platform and status only, never a made-up name.
-    // Once a game is announced, fill in `title` (and optionally `genre`, `teaser`).
+    // Mobile games (iOS and Android). Fill in `genre` and `teaser` once they can be made public.
+    // A game with an empty `title` is shown as "Unannounced", with platform and status only.
     {
-      slug: 'mobile-01',
-      title: '',
+      slug: 'purzzle',
+      title: 'Purzzle',
       genre: '',
       status: 'In development',
-      platforms: ['Mobile'],
+      platforms: ['iOS', 'Android'],
       // One short public sentence. Shown on the card when set.
       teaser: '',
     },
     {
-      slug: 'mobile-02',
-      title: '',
+      slug: 'swish-happens',
+      title: 'Swish Happens',
       genre: '',
       status: 'In development',
-      platforms: ['Mobile'],
+      platforms: ['iOS', 'Android'],
       teaser: '',
     },
   ],

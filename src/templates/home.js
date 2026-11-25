@@ -21,6 +21,9 @@ const andList = (items) =>
 /** Visible name for a game; unannounced games never get a made-up title. */
 const gameName = (g) => g.title || 'Unannounced';
 
+const MOBILE = ['Mobile', 'iOS', 'Android'];
+const isMobileGame = (g) => (g.platforms || []).length > 0 && g.platforms.every((p) => MOBILE.includes(p));
+
 const gameCount = (n) => `${n} ${n === 1 ? 'game' : 'games'}`;
 
 const WORDS = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
@@ -80,16 +83,18 @@ function nowMaking(cfg) {
     lead.platforms?.length ? `, a ${coop ? 'co-op ' : ''}game for ${esc(lead.platforms.join(' and '))}` : ''
   }`;
   if (!rest.length) return `<p data-reveal>Right now we’re making ${leadText}. Things will get messy. That’s the point.</p>`;
+  const link = (g) => `<a class="inline-link" href="#${esc(g.slug)}">${esc(g.title)}</a>`;
+  const named = rest.filter((g) => g.title);
   const unannounced = rest.filter((g) => !g.title);
-  const named = rest.filter((g) => g.title).map((g) => `<a class="inline-link" href="#${esc(g.slug)}">${esc(g.title)}</a>`);
-  const mobileOnly = unannounced.every((g) => (g.platforms || []).join() === 'Mobile');
-  const parts = [...named];
-  if (unannounced.length) {
-    parts.push(
-      `${unannounced.length === 1 ? 'a' : inWords(unannounced.length)} ${mobileOnly ? 'mobile ' : ''}${unannounced.length === 1 ? 'game' : 'games'} we’ll reveal soon`,
-    );
-  }
-  return `<p data-reveal>Right now we’re making ${inWords(cfg.games.length)} games: ${leadText}, and ${parts.join(', ')}. Things will get messy. That’s the point.</p>`;
+  const allMobile = rest.every(isMobileGame);
+  const platforms = [...new Set(rest.flatMap((g) => g.platforms || []))].filter((p) => p !== 'Mobile');
+  const where = allMobile ? `${platforms.length ? ` for ${esc(platforms.join(' and '))}` : ''}` : '';
+  const kind = allMobile ? 'mobile ' : '';
+  let tail = `${inWords(rest.length)} ${kind}games${where}`;
+  if (named.length && !unannounced.length) tail = `${andList(named.map(link)).replace('&amp;', 'and')}, ${named.length === 1 ? `a ${kind}game` : tail}`;
+  else if (named.length) tail += `: ${named.map(link).join(', ')} and ${inWords(unannounced.length)} we’ll reveal soon`;
+  else tail += ` we’ll reveal soon`;
+  return `<p data-reveal>Right now we’re making ${inWords(cfg.games.length)} games: ${leadText}, and ${tail}. Things will get messy. That’s the point.</p>`;
 }
 
 function about(cfg) {
@@ -208,7 +213,7 @@ function slate(cfg) {
     .map(
       (g, i) => `<li><a class="slate__row" href="#${esc(g.slug)}">
         <span class="slate__index" aria-hidden="true">P—${pad(i + 1)}</span>
-        <span class="slate__title${g.title ? '' : ' slate__title--veiled'}">${esc(gameName(g))}${g.title ? '' : `<span class="visually-hidden"> ${esc((g.platforms || []).join(', ').toLowerCase())} game</span>`}</span>
+        <span class="slate__title${g.title ? '' : ' slate__title--veiled'}">${esc(gameName(g))}${g.title ? '' : `<span class="visually-hidden"> ${isMobileGame(g) ? 'mobile' : esc((g.platforms || []).join(', '))} game</span>`}</span>
         <span class="slate__tags">
           ${(g.platforms || []).map((p) => `<span class="tag">${esc(p)}</span>`).join('')}
           <span class="slate__status"><span class="pulse" aria-hidden="true"></span>${esc(g.status || 'In development')}</span>
@@ -264,18 +269,22 @@ function featured(game) {
 /** One card for each further game. Unannounced games show a veiled phone, platform and status only. */
 function sideGame(g, i) {
   const n = pad(i + 2);
-  const platform = (g.platforms || []).join(', ');
-  const isMobile = (g.platforms || []).includes('Mobile');
-  const teaser = g.teaser || (g.title ? '' : 'In development now. The name, the art and the first look come when it’s ready.');
+  const platform = (g.platforms || []).join(' & ');
+  const isMobile = isMobileGame(g);
+  const teaser =
+    g.teaser ||
+    (g.title
+      ? 'In development now. The first look comes when it’s ready.'
+      : 'In development now. The name, the art and the first look come when it’s ready.');
   return `<li class="side-game" data-reveal>
     <article id="${esc(g.slug)}" aria-labelledby="${esc(g.slug)}-title">
       <div class="side-game__art${isMobile ? ' side-game__art--phone' : ''}" aria-hidden="true">
         <div class="side-game__screen"><span class="side-game__num">${n}</span></div>
-        ${g.title ? '' : '<p class="side-game__tape">Reveal soon</p>'}
+        <p class="side-game__tape">${g.title ? 'Coming soon' : 'Reveal soon'}</p>
       </div>
       <div class="side-game__body">
         <p class="game__index"><span aria-hidden="true">P—${n}</span>${g.genre ? `<span class="game__genre">${esc(g.genre)}</span>` : ''}</p>
-        <h4 class="side-game__title${g.title ? '' : ' side-game__title--veiled'}" id="${esc(g.slug)}-title">${g.title ? esc(g.title) : `Unannounced<span class="visually-hidden"> ${esc(platform.toLowerCase())} game</span>`}</h4>
+        <h4 class="side-game__title${g.title ? '' : ' side-game__title--veiled'}" id="${esc(g.slug)}-title">${g.title ? esc(g.title) : `Unannounced<span class="visually-hidden"> ${isMobile ? 'mobile' : esc(platform)} game</span>`}</h4>
         ${teaser ? `<p class="side-game__teaser">${esc(teaser)}</p>` : ''}
         <dl class="side-game__meta">
           ${platform ? `<div><dt>Platform</dt><dd>${esc(platform)}</dd></div>` : ''}
@@ -289,8 +298,7 @@ function sideGame(g, i) {
 function moreGames(cfg) {
   const rest = cfg.games.slice(1);
   if (!rest.length) return '';
-  const shared = [...new Set(rest.map((g) => (g.platforms || []).join(', ')))];
-  const title = shared.length === 1 && shared[0] ? `Next up, on ${esc(shared[0].toLowerCase())}.` : 'Also in development.';
+  const title = rest.every(isMobileGame) ? 'Next up, on mobile.' : 'Also in development.';
   return `<div class="container more-games">
     <div class="more-games__head">
       <p class="kicker" data-reveal>Also in the works</p>
