@@ -19,7 +19,7 @@ export default {
     location: 'Istanbul, Türkiye',
     // Shown in search results and link previews.
     description:
-      'SoggyByte Games is an Istanbul-based game studio. Our current game, DoNOTSpill, is a two-player co-op delivery game coming soon to Steam.',
+      'SoggyByte Games is an Istanbul-based game studio making games for PC and mobile. DoNOTSpill, a two-player co-op delivery game, is coming soon to Steam.',
   },
 
   contact: {
@@ -60,8 +60,31 @@ export default {
         keyArtAlt: '',
         trailerMp4: '',
         trailerPoster: '',
-        screenshots: [], // [{ src: 'media/donotspill/shot-01.webp', alt: '...' }]
+        screenshots: [], // [{ src: 'media/donotspill/shot-01.webp', alt: '...', width: 2400, height: 1350 }]
+        // Pixel size of the key art, so the page does not jump while it loads.
+        keyArtWidth: 0,
+        keyArtHeight: 0,
       },
+    },
+    // Mobile games. Leave `title` empty while a game is unannounced: the site then shows
+    // an "Unannounced" card with the platform and status only, never a made-up name.
+    // Once a game is announced, fill in `title` (and optionally `genre`, `teaser`).
+    {
+      slug: 'mobile-01',
+      title: '',
+      genre: '',
+      status: 'In development',
+      platforms: ['Mobile'],
+      // One short public sentence. Shown on the card when set.
+      teaser: '',
+    },
+    {
+      slug: 'mobile-02',
+      title: '',
+      genre: '',
+      status: 'In development',
+      platforms: ['Mobile'],
+      teaser: '',
     },
   ],
 

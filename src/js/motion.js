@@ -242,15 +242,20 @@ export function initMotion({ reduced, liquid, vessel }) {
   );
 
   // Liquid surface reacts to scroll speed.
+  if (surfaceEl) {
+    ScrollTrigger.create({
+      trigger: surfaceEl.parentElement,
+      start: 'top bottom',
+      end: 'bottom top',
+      onUpdate: (s) => surface.stir(s.getVelocity()),
+    });
+  }
+  // The DoNOTSpill glass sloshes with scroll speed.
   ScrollTrigger.create({
-    trigger: '.games',
+    trigger: '[data-game]',
     start: 'top bottom',
     end: 'bottom top',
-    onUpdate: (s) => {
-      const v = s.getVelocity();
-      surface.stir(v);
-      vessel.kick(-v * 0.00006);
-    },
+    onUpdate: (s) => vessel.kick(-s.getVelocity() * 0.00006),
   });
 
   // DoNOTSpill stage.
